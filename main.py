@@ -30,12 +30,12 @@ def validate_token(x_token: Union[str, None] = Header(default=None)) -> Dict:
 
 
 @app.get("/books", tags=["Book"])
-def index():
+def index(user: Dict = Depends(validate_token)):
     return db["books"]
 
 
 @app.get("/books/{id}", tags=["Book"])
-def show(id: int):
+def show(id: int, user: Dict = Depends(validate_token)):
     book = next((item for item in db["books"] if item["id"] == id), None)
     if not book:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
@@ -43,8 +43,8 @@ def show(id: int):
     return book
 
 
-@app.post("/books", status_code=status.HTTP_201_CREATED, tags=["Book"])
-def create(response: Response, book: Book = Body()):
+@app.post("/books", tags=["Book"], status_code=status.HTTP_201_CREATED)
+def create(book: Book = Body(), user: Dict = Depends(validate_token)):
     new_index = db["books"][-1].get("id", 0) + 1 if db["books"] else 1
     new_book = { "id": new_index, **book.dict()}
     db["books"].append(new_book)
@@ -52,7 +52,7 @@ def create(response: Response, book: Book = Body()):
 
 
 @app.put("/books/{id}", tags=["Book"])
-def update(id: int, update_book: Book = Body()):
+def update(id: int, update_book: Book = Body(), user: Dict = Depends(validate_token)):
     book = next((item for item in db["books"] if item["id"] == id), None)
     
     if not book:
