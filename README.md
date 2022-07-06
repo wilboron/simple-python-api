@@ -1,5 +1,7 @@
 # Simple Python API
 
+This API will be used as a mock API in a talk to introduce API testing with Pytest.
+
 ## Installation
 
 Requires [Python](https://www.python.org/) 3.7+ to run.
