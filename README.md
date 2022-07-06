@@ -25,6 +25,8 @@ And start the server
 uvicorn main:app
 ```
 
+The API swagger can be acessed in this link: http://127.0.0.1:8000/docs
+
 
 ## License
 
