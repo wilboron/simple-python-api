@@ -48,7 +48,7 @@ def create(response: Response, book: Book = Body()):
     new_index = db["books"][-1].get("id", 0) + 1 if db["books"] else 1
     new_book = { "id": new_index, **book.dict()}
     db["books"].append(new_book)
-    return JSONResponse(content=new_book, headers={"location" : f"/books/{new_index}"})
+    return JSONResponse(content=new_book, headers={"location" : f"/books/{new_index}"}, status_code=status.HTTP_201_CREATED)
 
 
 @app.put("/books/{id}", tags=["Book"])
